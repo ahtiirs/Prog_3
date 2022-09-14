@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  client:
+    build:
+      dockerfile: Dockerfile
+      context: ./client
+    ports:
+      - "80:3000"
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+
+
+
+  mysql_server:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./mysql.sql:/docker-entrypoint-initdb.d/mysql.sql"
+    networks:
+      - schedule-app
+
+    environment:
+      - MYSQL_DATABASE=HomeWork
+      - MYSQL_USER=HomeWork
+      - MYSQL_PASSWORD=homework-pw
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+
+networks:
+  schedule-app:
+    driver: bridge
